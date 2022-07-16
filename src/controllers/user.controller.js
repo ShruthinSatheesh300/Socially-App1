@@ -1,6 +1,6 @@
 import HttpStatus from 'http-status-codes';
-import * as UserService from '../services/user.service';
-
+import { userService } from '../services';
+import { UserDto } from '../dtos/users';
 
 /**
  * Controller to create a new user
@@ -8,12 +8,12 @@ import * as UserService from '../services/user.service';
  * @param {object} res - response object
  * @param {Function} next
  */
-export const userRegistration = async (req, res, next) => {
+export const createUser = async (req, res, next) => {
   try {
-    const data = await UserService.newUser(req.body);
+    //todo-validate req body
+    const newUser = await userService.createUser(req.body);
     res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
-      data: data,
+      data: new UserDto(newUser),
       message: 'User created successfully'
     });
   } catch (error) {
@@ -21,3 +21,20 @@ export const userRegistration = async (req, res, next) => {
   }
 };
 
+export const userLogin = async (req, res, next) => {
+  try {
+    const getUser = await userService.getUser(req.body);
+    if (getUser == null) {
+      res.status(HttpStatus.NOT_FOUND).json({
+        message: 'User Doesnt Exists'
+      });
+    } else {
+      res.status(HttpStatus.OK).json({
+        data: getUser,
+        message: 'User Login successfully'
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
