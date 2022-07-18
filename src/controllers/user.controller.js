@@ -1,6 +1,8 @@
 import HttpStatus from 'http-status-codes';
 import { userService } from '../services';
 import { UserDto } from '../dtos/users';
+import { UserDtoL } from '../dtos/users';
+import Joi from '@hapi/joi';
 
 /**
  * Controller to create a new user
@@ -10,7 +12,28 @@ import { UserDto } from '../dtos/users';
  */
 export const createUser = async (req, res, next) => {
   try {
-    //todo-validate req body
+    const schema = Joi.object({
+      firstName: Joi.string()
+        .min(4)
+        .required()
+        .error(Error('Enter a appropriate first name')),
+      lastName: Joi.string()
+        .min(4)
+        .required()
+        .error(Error('Enter a appropriate last name')),
+      email: Joi.string()
+        .email()
+        .required()
+        .error(Error('Enter a appropriate Email')),
+      password: Joi.string().min(6).required()
+    });
+    const { error } = schema.validate(req.body);
+    if (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: `Enter valid deatils : ${error}`
+      });
+    }
+
     const newUser = await userService.createUser(req.body);
     res.status(HttpStatus.CREATED).json({
       data: new UserDto(newUser),
@@ -28,12 +51,11 @@ export const userLogin = async (req, res, next) => {
       res.status(HttpStatus.NOT_FOUND).json({
         message: 'User Doesnt Exists'
       });
-    } else {
-      res.status(HttpStatus.OK).json({
-        data: getUser,
-        message: 'User Login successfully'
-      });
     }
+    res.status(HttpStatus.OK).json({
+      data: new UserDtoL(getUser),
+      message: 'Login Successfull'
+    });
   } catch (error) {
     next(error);
   }
