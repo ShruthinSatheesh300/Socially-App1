@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import logger from './logger';
 
 const database = async () => {
   try {
@@ -9,15 +8,10 @@ const database = async () => {
         ? process.env.DATABASE_TEST
         : process.env.DATABASE;
 
-    await mongoose.connect(DATABASE, {
-      useFindAndModify: false,
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-    logger.info('Connected to the database.');
+    await mongoose.connect(DATABASE);
+    console.info('Connected to the database.');
   } catch (error) {
-    logger.error('Could not connect to the database.', error);
+    console.error('Could not connect to the database.', error);
   }
 };
 export default database;

@@ -1,56 +1,26 @@
 import HttpStatus from 'http-status-codes';
-import * as UserService from '../services/user.service';
-
-/**
- * Controller to get all users available
- * @param  {object} req - request object
- * @param {object} res - response object
- * @param {Function} next
- */
-export const getAllUsers = async (req, res, next) => {
-  try {
-    const data = await UserService.getAllUsers();
-    res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
-      data: data,
-      message: 'All users fetched successfully'
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-/**
- * Controller to get a single user
- * @param  {object} req - request object
- * @param {object} res - response object
- * @param {Function} next
- */
-export const getUser = async (req, res, next) => {
-  try {
-    const data = await UserService.getUser(req.params._id);
-    res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
-      data: data,
-      message: 'User fetched successfully'
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
+import { userService } from '../services';
+import { UserDto } from '../dtos/users';
+import Joi from '@hapi/joi';
+import { validateNewUser } from '../validators/user.validator';
 /**
  * Controller to create a new user
  * @param  {object} req - request object
  * @param {object} res - response object
  * @param {Function} next
  */
-export const newUser = async (req, res, next) => {
+export const createUser = async (req, res, next) => {
   try {
-    const data = await UserService.newUser(req.body);
+    const error = validateNewUser(req);
+    if (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+        message: `Enter valid deatils : ${error}`
+      });
+    }
+
+    const newUser = await userService.createUser(req.body);
     res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
-      data: data,
+      data: new UserDto(newUser),
       message: 'User created successfully'
     });
   } catch (error) {
@@ -58,39 +28,19 @@ export const newUser = async (req, res, next) => {
   }
 };
 
-/**
- * Controller to update a user
- * @param  {object} req - request object
- * @param {object} res - response object
- * @param {Function} next
- */
-export const updateUser = async (req, res, next) => {
+export const userLogin = async (req, res, next) => {
   try {
-    const data = await UserService.updateUser(req.params._id, req.body);
-    res.status(HttpStatus.ACCEPTED).json({
-      code: HttpStatus.ACCEPTED,
-      data: data,
-      message: 'User updated successfully'
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-/**
- * Controller to delete a user
- * @param  {object} req - request object
- * @param {object} res - response object
- * @param {Function} next
- */
-export const deleteUser = async (req, res, next) => {
-  try {
-    await UserService.deleteUser(req.params._id);
-    res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
-      data: [],
-      message: 'User deleted successfully'
-    });
+    const getUser = await userService.getUser(req.body);
+    if (getUser == null) {
+      res.status(HttpStatus.NOT_FOUND).json({
+        message: 'User Doesnt Exists'
+      });
+    } else {
+      res.status(HttpStatus.OK).json({
+        data: getUser,
+        message: 'User Login successfully'
+      });
+    }
   } catch (error) {
     next(error);
   }

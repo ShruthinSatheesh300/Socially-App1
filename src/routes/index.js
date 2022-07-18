@@ -1,17 +1,25 @@
 import express from 'express';
 const router = express.Router();
 
-import userRoute from './user.route';
+import userRoutes from './user.route';
 /**
  * Function contains Application routes
  *
  * @returns router
  */
+const routeMaps = [
+  {
+    path: '/users',
+    handler: userRoutes
+  }
+];
 const routes = () => {
   router.get('/', (req, res) => {
-    res.json('Welcome');
+    res.json('Welcome To Socially');
   });
-  router.use('/users', userRoute);
+  routeMaps.forEach(({ path, handler }) => {
+    router.use(path, handler);
+  });
 
   return router;
 };
