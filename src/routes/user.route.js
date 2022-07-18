@@ -1,12 +1,11 @@
 import express from 'express';
-import * as userController from '../controllers/user.controller';
-import { newUserValidator } from '../validators/user.validator';
-import { userAuth } from '../middlewares/auth.middleware';
-
+import { userController } from '../controllers';
 const router = express.Router();
 
-
 //route to create a new user
-router.post('/user', newUserValidator, userController.createUser);
+router.post('/', userController.createUser);
+
+//route for user login
+router.get('/', userController.userLogin);
 
 export default router;
