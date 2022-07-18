@@ -7,11 +7,11 @@ export const createUser = async (body) => {
   const { email, password } = body;
   const user = await User.findOne({ email });
 
-  if (user !== null) {
+  if (user) {
     throw new Error('User already exists');
   }
 
-  const hashSalt = 10;
+  const hashSalt = parseInt(process.env.HASH_SALT, 10);
   const hashPassword = bcrypt.hashSync(password, hashSalt);
   body.password = hashPassword;
   return User.create(body);
@@ -22,17 +22,18 @@ export const getUser = async (body) => {
   const { email, password } = body;
   const user = await User.findOne({ email });
 
-  if (user == null) {
-    throw new Error('User not registered');
+  if (!user) {
+    throw new Error('User doesnt exist');
   }
-  const checkPassword = bcrypt.compareSync(password, user.password);
+  const passwordMatches = bcrypt.compareSync(password, user.password);
 
-  if (checkPassword) {
-    return jwt.sign(
-      { email: user.email, id: user.id },
-      process.env.SECRET_CODE
-    );
+  if (!passwordMatches) {
+    throw new Error('Password is Invalid');
   }
 
-  throw new Error('Password is Invalid');
+  const authToken = jwt.sign({ email: user.email, id: user.id }, process.env.SECRET_CODE);
+  return {
+    user,
+    authToken
+  }
 };
