@@ -2,6 +2,7 @@ import HttpStatus from 'http-status-codes';
 import { userService } from '../services';
 import { UserDto } from '../dtos/users';
 import Joi from '@hapi/joi';
+import { validateNewUser } from '../validators/user.validator';
 /**
  * Controller to create a new user
  * @param  {object} req - request object
@@ -10,18 +11,12 @@ import Joi from '@hapi/joi';
  */
 export const createUser = async (req, res, next) => {
   try {
-    const schema = Joi.object({
-      firstName: Joi.string().min(4).required().error(Error('Enter a appropriate first name')),
-      lastName: Joi.string().min(4).required().error(Error('Enter a appropriate last name')),
-      email: Joi.string().email().required().error(Error('Enter a appropriate Email')),
-      password: Joi.string().min(6).required()
-    });
-    const { error } = schema.validate(req.body);
+    const error = validateNewUser(req);
     if (error) {
       res.status(HttpStatus.BAD_REQUEST).json({
         message: `Enter valid deatils : ${error}`
-      })
-    } 
+      });
+    }
 
     const newUser = await userService.createUser(req.body);
     res.status(HttpStatus.CREATED).json({

@@ -7,11 +7,11 @@ export const createUser = async (body) => {
   const { email, password } = body;
   const user = await User.findOne({ email });
 
-  if (user !== null) {
+  if (user) {
     throw new Error('User already exists');
   }
-  
-  const hashSalt = 10;
+
+  const hashSalt = parseInt(process.env.HASH_SALT, 10);
   const hashPassword = bcrypt.hashSync(password, hashSalt);
   body.password = hashPassword;
   return User.create(body);
