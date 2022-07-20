@@ -2,6 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 import userRoutes from './user.route';
+import postRoutes from './post.route'
 /**
  * Function contains Application routes
  *
@@ -11,6 +12,10 @@ const routeMaps = [
   {
     path: '/users',
     handler: userRoutes
+  },
+  {
+    path: '/posts',
+    handler: postRoutes
   }
 ];
 const routes = () => {
