@@ -2,6 +2,7 @@ import HttpStatus from 'http-status-codes';
 import { userService } from '../services';
 import { UserDto } from '../dtos/users';
 import { validateNewUser } from '../validators/user.validator';
+
 /**
  * Controller to create a new user
  * @param  {object} req - request object
@@ -29,8 +30,10 @@ export const createUser = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   try {
-    const { user, authToken } = await userService.getUser(req.body);
-    res.set('Authorization','Bearer '+ authToken);
+    const { email, password } = req.query;
+
+    const { user, authToken } = await userService.getUser({ email, password });
+    res.set('Authorization', 'Bearer ' + authToken);
 
     res.status(HttpStatus.OK).json({
       data: new UserDto(user)

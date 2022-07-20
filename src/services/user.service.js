@@ -21,7 +21,6 @@ export const createUser = async (body) => {
 export const getUser = async (body) => {
   const { email, password } = body;
   const user = await User.findOne({ email });
-
   if (!user) {
     throw new Error('User doesnt exist');
   }
@@ -31,9 +30,12 @@ export const getUser = async (body) => {
     throw new Error('Password is Invalid');
   }
 
-  const authToken = jwt.sign({ email: user.email, id: user.id }, process.env.SECRET_CODE);
+  const authToken = jwt.sign(
+    { email: user.email, id: user.id },
+    process.env.SECRET_CODE
+  );
   return {
     user,
     authToken
-  }
+  };
 };
