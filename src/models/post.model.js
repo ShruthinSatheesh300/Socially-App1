@@ -1,16 +1,15 @@
 import { Schema, model } from 'mongoose';
-
 const postSchema = new Schema(
   {
-    userId: {
-      type: String
+    createrId: {
+      type: 'ObjectId',
+      ref: 'User',
+      required: true
     },
 
-    postId: {
-      type: String
-    },
     content: {
-      type: String
+      type: String,
+      required: true
     }
   },
   {
