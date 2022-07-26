@@ -1,7 +1,8 @@
 import HttpStatus from 'http-status-codes';
-import { userService } from '../services';
+import { userService, postService } from '../services';
 import { UserDto } from '../dtos/users';
 import { validateNewUser } from '../validators/user.validator';
+import { PostDto } from '../dtos/posts';
 
 /**
  * Controller to create a new user
@@ -37,6 +38,20 @@ export const getUser = async (req, res, next) => {
 
     res.status(HttpStatus.OK).json({
       data: new UserDto(user)
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserPosts = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const posts = await postService.getUserPosts({ userId });
+    const results = posts.map((post) => new PostDto(post));
+    res.status(HttpStatus.OK).json({
+      data: results,
+      message: 'All Posts fetched successfully'
     });
   } catch (error) {
     next(error);

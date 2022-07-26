@@ -1,10 +1,9 @@
 import { Schema, model } from 'mongoose';
 const postSchema = new Schema(
   {
-    createrId: {
-      type: 'ObjectId',
-      ref: 'User',
-      required: true
+    creator: {
+      type: Schema.ObjectId,
+      ref: 'User'
     },
 
     content: {
@@ -12,6 +11,7 @@ const postSchema = new Schema(
       required: true
     }
   },
+
   {
     timestamps: true
   }

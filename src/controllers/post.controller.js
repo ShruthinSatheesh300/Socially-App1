@@ -4,7 +4,17 @@ import { PostDto } from '../dtos/posts';
 
 export const createPost = async (req, res, next) => {
   try {
-    const newPost = await postService.createPost(req.body);
+    const { content, user } = req.body;
+    if (content === '') {
+      throw new Error('Content is required');
+    }
+
+    const newPostDetails = {
+      content,
+      creator: user.userId
+    };
+    const newPost = await postService.createPost(newPostDetails);
+
     res.status(HttpStatus.CREATED).json({
       data: new PostDto(newPost),
       message: 'Post created successfully'
@@ -13,4 +23,3 @@ export const createPost = async (req, res, next) => {
     next(error);
   }
 };
-
