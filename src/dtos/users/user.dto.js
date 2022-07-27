@@ -5,4 +5,3 @@ export const UserDto = function (data) {
   this.email = data.email;
   this.createdAt = data.createdAt;
 };
-
