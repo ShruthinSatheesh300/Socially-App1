@@ -17,8 +17,11 @@ import {
 const app = express();
 const host = process.env.APP_HOST;
 const port = process.env.APP_PORT;
+ const corsOptions = {
+  exposedHeaders:'Authorization'
+ }
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

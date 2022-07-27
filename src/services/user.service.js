@@ -31,7 +31,7 @@ export const getUser = async (body) => {
   }
 
   const authToken = jwt.sign(
-    { email: user.email, id: user.id },
+    { email: user.email, id: user._id },
     process.env.SECRET_CODE
   );
   return {
