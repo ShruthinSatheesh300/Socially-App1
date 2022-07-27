@@ -1,8 +1,8 @@
 import HttpStatus from 'http-status-codes';
 import { userService } from '../services';
 import { UserDto } from '../dtos/users';
-import Joi from '@hapi/joi';
 import { validateNewUser } from '../validators/user.validator';
+
 /**
  * Controller to create a new user
  * @param  {object} req - request object
@@ -28,19 +28,16 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const userLogin = async (req, res, next) => {
+export const getUser = async (req, res, next) => {
   try {
-    const getUser = await userService.getUser(req.body);
-    if (getUser == null) {
-      res.status(HttpStatus.NOT_FOUND).json({
-        message: 'User Doesnt Exists'
-      });
-    } else {
-      res.status(HttpStatus.OK).json({
-        data: getUser,
-        message: 'User Login successfully'
-      });
-    }
+    const { email, password } = req.query;
+
+    const { user, authToken } = await userService.getUser({ email, password });
+    res.set('Authorization', 'Bearer ' + authToken);
+
+    res.status(HttpStatus.OK).json({
+      data: new UserDto(user)
+    });
   } catch (error) {
     next(error);
   }
