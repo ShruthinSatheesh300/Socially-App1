@@ -7,5 +7,5 @@ export const createPost = async (body) => {
 export const getUserPosts = async (body) => {
   const { userId } = body;
 
-  return await Post.find({ creator:userId }).populate('creator');
+  return await Post.find({ creator: userId });
 };
