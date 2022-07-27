@@ -9,3 +9,7 @@ export const getUserPosts = async (body) => {
 
   return await Post.find({ creator: userId });
 };
+
+export const getPosts = async () => {
+  return await Post.find().populate('creator', 'firstName lastName email');
+};
