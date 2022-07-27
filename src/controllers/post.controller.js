@@ -8,7 +8,7 @@ export const createPost = async (req, res, next) => {
     const { content, user } = req.body;
     const validationPayload = {
       content
-    }
+    };
 
     const error = validatePost(validationPayload);
     if (error) {
@@ -26,6 +26,19 @@ export const createPost = async (req, res, next) => {
     res.status(HttpStatus.CREATED).json({
       data: new PostDto(newPost),
       message: 'Post created successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getPosts = async (req, res, next) => {
+  try {
+    const posts = await postService.getPosts();
+    const results = posts.map((post) => new PostDto(post));
+    res.status(HttpStatus.OK).json({
+      data: results,
+      message: 'All Posts fetched successfully'
     });
   } catch (error) {
     next(error);

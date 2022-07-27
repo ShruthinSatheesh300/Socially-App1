@@ -6,4 +6,7 @@ const router = express.Router();
 //route to create a new post
 router.post('/', userAuth, postController.createPost);
 
+//route to get all posts
+router.get('/', userAuth, postController.getPosts);
+
 export default router;
