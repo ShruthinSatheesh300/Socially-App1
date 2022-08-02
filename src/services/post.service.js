@@ -11,5 +11,9 @@ export const getUserPosts = async (body) => {
 };
 
 export const getPosts = async () => {
-  return await Post.find().populate('creator', 'firstName lastName email');
+  return await Post.find(null, null, {
+    sort: {
+      createdAt: -1
+    }
+  }).populate('creator', 'firstName lastName email');
 };
