@@ -34,7 +34,7 @@ export const createPost = async (req, res, next) => {
 
 export const getPosts = async (req, res, next) => {
   try {
-    const { page = 1, limit = 2 } = req.query;
+    const { page = 1, limit = 10 } = req.query;
     const posts = await postService.getPosts({ page, limit });
     const results = posts.map((post) => new PostDto(post));
     res.status(HttpStatus.OK).json({
