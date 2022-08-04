@@ -20,6 +20,6 @@ export const getPosts = async (body) => {
     }
   })
     .populate('creator', 'firstName lastName email')
-    .limit(limit * 1)
+    .limit(parseInt(limit))
     .skip((page - 1) * limit);
 };
