@@ -9,4 +9,7 @@ router.post('/', userAuth, postController.createPost);
 //route to get all posts
 router.get('/', userAuth, postController.getPosts);
 
+//route to like the post
+router.put('/:postId/like', userAuth, postController.updateLikes);
+
 export default router;

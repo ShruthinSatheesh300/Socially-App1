@@ -45,3 +45,16 @@ export const getPosts = async (req, res, next) => {
     next(error);
   }
 };
+export const updateLikes = async (req, res, next) => {
+  try {
+    const { user } = req.body;
+    const { postId } = req.params;
+    const payload = { postId, userId: user.userId };
+    const posts = await postService.updateLikes(payload);
+    res.status(HttpStatus.OK).json({
+      data: new PostDto(posts),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
