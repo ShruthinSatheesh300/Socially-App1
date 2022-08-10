@@ -10,10 +10,15 @@ export const getUserPosts = async (body) => {
   return await Post.find({ creator: userId });
 };
 
-export const getPosts = async () => {
+export const getPosts = async (body) => {
+  const { page, limit } = body;
+
   return await Post.find(null, null, {
     sort: {
       createdAt: -1
     }
-  }).populate('creator', 'firstName lastName email');
+  })
+    .populate('creator', 'firstName lastName email')
+    .limit(parseInt(limit))
+    .skip((page - 1) * limit);
 };
