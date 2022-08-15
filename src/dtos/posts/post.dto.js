@@ -6,3 +6,8 @@ export const PostDto = function (data) {
   this.createdAt = data.createdAt;
   this.updatedAt = data.updatedAt;
 };
+
+export const LikedUser = function(data){
+  this.likes = data.likes
+}
+
