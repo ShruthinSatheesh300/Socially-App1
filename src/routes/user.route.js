@@ -11,4 +11,10 @@ router.get('/', userController.getUser);
 
 router.get('/:userId/posts', userAuth, userController.getUserPosts);
 
+//route for following
+router.put('/:followId/follow',userAuth,userController.followUser);
+
+//route for unfollowing
+router.put('/:followId/unfollow',userAuth,userController.unFollowUser)
+
 export default router;

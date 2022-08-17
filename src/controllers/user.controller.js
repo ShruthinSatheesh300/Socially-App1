@@ -57,3 +57,33 @@ export const getUserPosts = async (req, res, next) => {
     next(error);
   }
 };
+
+export const followUser = async (req, res, next) => {
+  try {
+    const { followId } = req.params;
+    const { user } = req.body;
+    const payload = { followId, userId: user.userId };
+    const users = await userService.followUser(payload);
+    res.status(HttpStatus.OK).json({
+      data: new UserDto(users),
+      message: 'user is following'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const unFollowUser = async (req, res, next) => {
+  try {
+    const { followId } = req.params;
+    const { user } = req.body;
+    const payload = { followId, userId: user.userId };
+    const users = await userService.unFollowUser(payload);
+    res.status(HttpStatus.OK).json({
+      data: new UserDto(users),
+      message: 'user unfollowed'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
