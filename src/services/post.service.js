@@ -51,3 +51,8 @@ export const updateLikes = async (body) => {
   );
   return likes;
 };
+
+export const getLikesForPost = async (body) => {
+  const postId = Types.ObjectId(body.postId);
+  return await Post.findOne(postId).populate('likes', 'firstName lastName');
+};
