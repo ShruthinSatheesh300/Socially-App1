@@ -7,7 +7,6 @@ export const PostDto = function (data) {
   this.updatedAt = data.updatedAt;
 };
 
-export const LikedUser = function(data){
-  this.likes = data.likes
-}
-
+export const LikesDto = function (data) {
+  this.likes = data.likes;
+};

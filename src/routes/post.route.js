@@ -13,6 +13,6 @@ router.get('/', userAuth, postController.getPosts);
 router.put('/:postId/like', userAuth, postController.updateLikes);
 
 //route to get liked users
-router.get('/:postId',userAuth,postController.likedUsers)
+router.get('/:postId/like',userAuth,postController.getLikes)
 
 export default router;
